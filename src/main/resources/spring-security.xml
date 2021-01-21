@@ -20,6 +20,7 @@
 <!--    <security:http security="none" pattern="/pages/**"></security:http>-->
     <security:http security="none" pattern="/login.html"></security:http>
     <security:http security="none" pattern="/login_fail.html"></security:http>
+    <security:http security="none" pattern="/logout_success.html"></security:http>
 
     <!--1. 配置哪些资源需要拦截,以及认证授权规则
           auto-config:自动配置，true: 自动应用默认配置，比如会提供一个默认登录页面
