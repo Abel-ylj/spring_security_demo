@@ -10,3 +10,10 @@
 
     
 
+### 用户认证逻辑
+
+![image-20210121191709405](https://yljnote.oss-cn-hangzhou.aliyuncs.com/2021-01-21-111710.png)
+
+### 整体认证鉴权框架
+
+![image-20210121191840583](https://yljnote.oss-cn-hangzhou.aliyuncs.com/2021-01-21-111841.png)
