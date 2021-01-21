@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+						http://www.springframework.org/schema/beans/spring-beans.xsd
+						http://www.springframework.org/schema/mvc
+						http://www.springframework.org/schema/mvc/spring-mvc.xsd
+						http://code.alibabatech.com/schema/dubbo
+						http://code.alibabatech.com/schema/dubbo/dubbo.xsd
+						http://www.springframework.org/schema/context
+						http://www.springframework.org/schema/context/spring-context.xsd
+                     http://www.springframework.org/schema/security
+                     http://www.springframework.org/schema/security/spring-security.xsd">
+
+    <!--配置哪些资源匿名可以访问（不登录也可以访问）-->
+    <!--<security:http security="none" pattern="/pages/a.html"></security:http>
+    <security:http security="none" pattern="/pages/b.html"></security:http>-->
+    <!--<security:http security="none" pattern="/pages/**"></security:http>-->
+    <security:http security="none" pattern="/login.html"></security:http>
+
+
+
+    <!--
+        1.auto-config:自动配置，true: 自动应用默认配置，比如会提供一个默认登录页面
+          use-expressions:是否使用spring security提供的表达式来描述权限,hasRole(),hasAuthority(),isAuthenticated()
+    -->
+    <security:http auto-config="true" use-expressions="true">
+        <!--1.1 配置拦截&通过规则，对应Filter责任链中的true就通过继续，pattern:描述拦截规则,asscess:指定所需的访问角色或者访问权限 -->
+        <security:intercept-url pattern="/pages/a.html" access="isAuthenticated()"/>
+        <security:intercept-url pattern="/pages/b.html" access="hasAuthority('add')"/>
+        <security:intercept-url pattern="/pages/c.html" access="hasRole('ROLE_ADMIN')"/>
+        <!--拥有ROLE_ADMIN角色就可以访问d.html页面，注意：此处虽然写的是ADMIN角色，框架会自动加上前缀ROLE_-->
+        <security:intercept-url pattern="/pages/d.html" access="hasRole('ADMIN')"/>
+        <!-- 最后一层防护，/** 拦截所有请求, 而/* 只能拦截第一层的路径如/a,不能拦截/a/b-->
+        <security:intercept-url pattern="/**" access="hasRole('ROLE_ADMIN')"></security:intercept-url>
+
+
+        <!--1.2 注册自定义登录页，和login回调方法-->
+        <!-- login-page:指定登录页面访问URL-->
+        <!-- csrf(cross-site request forgery)：跨站请求伪造,对应CsrfFilter过滤器
+          disabled：是否启用CsrfFilter过滤器，如果使用自定义登录页面需要关闭此项，否则登录操作会被禁用（403）
+        -->
+<!--        <security:form-login-->
+<!--                login-page="/login.html"-->
+<!--                username-parameter="username"-->
+<!--                password-parameter="password"-->
+<!--                login-processing-url="/login.do"-->
+<!--                default-target-url="/index.html"-->
+<!--                authentication-failure-url="/login.html"></security:form-login>-->
+<!--        <security:csrf disabled="true"></security:csrf>-->
+
+        <!-- 1.3 注册退出登录展示页和logout回调方法
+          logout：退出登录
+          logout-url：退出登录操作对应的请求路径
+          logout-success-url：退出登录后的跳转页面
+        -->
+        <security:logout
+                logout-url="/logout.do"
+                logout-success-url="/login.html"
+                invalidate-session="true"/>
+    </security:http>
+
+
+    <!--2. 配置认证管理器，hasRole()等表达式验证的实际过程-->
+    <security:authentication-manager>
+        <!--配置认证提供者-->
+<!--        <security:authentication-provider user-service-ref="userService2">-->
+        <security:authentication-provider>
+<!--                    配置一个具体的用户，后期需要从数据库查询用户-->
+            <security:user-service>
+                <security:user name="admin" password="{noop}1234" authorities="ROLE_ADMIN"/>
+            </security:user-service>
+
+            <!--指定度密码进行加密的对象-->
+<!--            <security:password-encoder ref="passwordEncoder"></security:password-encoder>-->
+        </security:authentication-provider>
+    </security:authentication-manager>
+
+<!--    <bean id="userService" class="cn.ylj.service.SpringSecurityUserService"></bean>-->
+<!--    <bean id="userService2" class="cn.ylj.service.SpringSecurityUserService2"></bean>-->
+
+<!--    &lt;!&ndash;配置密码加密对象&ndash;&gt;-->
+<!--    <bean id="passwordEncoder"-->
+<!--          class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>-->
+
+<!--    &lt;!&ndash;开启spring注解使用&ndash;&gt;-->
+<!--    <context:annotation-config></context:annotation-config>-->
+
+
+<!--    &lt;!&ndash;  开启mvc的三大组件，若有jackson包，自动使用jackson  &ndash;&gt;-->
+<!--    <mvc:annotation-driven></mvc:annotation-driven>-->
+<!--    <context:component-scan base-package="cn.ylj.controller"></context:component-scan>-->
+
+<!--    &lt;!&ndash;开启注解方式权限控制&ndash;&gt;-->
+<!--    <security:global-method-security pre-post-annotations="enabled"/>-->
+</beans>
