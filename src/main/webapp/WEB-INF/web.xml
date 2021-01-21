@@ -4,7 +4,26 @@
 
 <web-app>
   <display-name>Archetype Created Web Application</display-name>
+  <!-- 解决post乱码，使用三大组件之一的filter, 在前置控制器servlet之前，进入该逻辑 -->
+  <filter>
+    <filter-name>CharacterEncodingFilter</filter-name>
+    <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+    <init-param>
+      <param-name>encoding</param-name>
+      <param-value>utf-8</param-value>
+    </init-param>
+    <init-param>
+      <param-name>forceEncoding</param-name>
+      <param-value>true</param-value>
+    </init-param>
+  </filter>
+  <filter-mapping>
+    <filter-name>CharacterEncodingFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
 
+
+<!--  SpringSecurity框架过滤器-->
   <filter>
     <!--
       DelegatingFilterProxy用于整合第三方框架，
