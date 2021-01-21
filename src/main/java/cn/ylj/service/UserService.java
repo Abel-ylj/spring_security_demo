@@ -35,7 +35,8 @@ public class UserService implements UserDetailsService {
         UserEntity user = this.findUserEncryptedInDb(username);
         if (user != null){
             if (user.getUsername().equals("admin")){
-                return new User(username, user.getPassword(), Lists.newArrayList(new SimpleGrantedAuthority("ROLE_ADMIN")));
+                return new User(username, user.getPassword(),
+                        Lists.newArrayList(new SimpleGrantedAuthority("ROLE_ADMIN"),new SimpleGrantedAuthority("add")));
             }
             return new User(username,user.getPassword(), Lists.newArrayList(new SimpleGrantedAuthority("add")));
         }

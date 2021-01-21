@@ -4,6 +4,7 @@
 
 <web-app>
   <display-name>Archetype Created Web Application</display-name>
+
   <!-- 解决post乱码，使用三大组件之一的filter, 在前置控制器servlet之前，进入该逻辑 -->
   <filter>
     <filter-name>CharacterEncodingFilter</filter-name>
@@ -17,13 +18,8 @@
       <param-value>true</param-value>
     </init-param>
   </filter>
-  <filter-mapping>
-    <filter-name>CharacterEncodingFilter</filter-name>
-    <url-pattern>/*</url-pattern>
-  </filter-mapping>
 
-
-<!--  SpringSecurity框架过滤器-->
+  <!--  SpringSecurity框架过滤器-->
   <filter>
     <!--
       DelegatingFilterProxy用于整合第三方框架，
@@ -34,6 +30,12 @@
     <filter-name>springSecurityFilterChain</filter-name>
     <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
   </filter>
+
+
+  <filter-mapping>
+    <filter-name>CharacterEncodingFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
   <filter-mapping>
     <!-- 该名字是确定的，表示使用SpringSecurity，用shiro的话是另一个名字   -->
     <filter-name>springSecurityFilterChain</filter-name>

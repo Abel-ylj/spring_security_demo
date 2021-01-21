@@ -33,7 +33,7 @@
         <!--拥有ROLE_ADMIN角色就可以访问d.html页面，注意：此处虽然写的是ADMIN角色，框架会自动加上前缀ROLE_-->
         <security:intercept-url pattern="/pages/d.html" access="hasRole('ADMIN')"/>
         <!-- 最后一层防护，/** 拦截所有请求, 而/* 只能拦截第一层的路径如/a,不能拦截/a/b-->
-        <security:intercept-url pattern="/**" access="hasRole('ROLE_ADMIN')"></security:intercept-url>
+        <security:intercept-url pattern="/**" access="hasAuthority('add')"></security:intercept-url>
 
 
         <!--1.2 注册自定义登录页，和login回调方法-->
@@ -73,17 +73,18 @@
 
     <bean id="userService" class="cn.ylj.service.UserService"></bean>
 
-    <!--配置加密器Encoder-->
+    <!--3.1密码加密：配置加密器Encoder-->
     <bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
 
-    <!--开启spring注解使用,将Encoder注入到userService中-->
+    <!--3.21密码加密：开启spring注解使用,将Encoder注入到userService中-->
     <context:annotation-config></context:annotation-config>
 
 
-<!--    &lt;!&ndash;  开启mvc的三大组件，若有jackson包，自动使用jackson  &ndash;&gt;-->
-<!--    <mvc:annotation-driven></mvc:annotation-driven>-->
-<!--    <context:component-scan base-package="cn.ylj.controller"></context:component-scan>-->
+    <!--4.方法级控制权限，SpringMVC自动配置：mvc的三大组件，若有jackson包，自动使用jackson  -->
+    <mvc:annotation-driven></mvc:annotation-driven>
+    <context:component-scan base-package="cn.ylj.controller"></context:component-scan>
 
-<!--    &lt;!&ndash;开启注解方式权限控制&ndash;&gt;-->
-<!--    <security:global-method-security pre-post-annotations="enabled"/>-->
+    <!--4.方法级控制权限 SpringSecurity开启注解方式权限控制-->
+    <security:global-method-security pre-post-annotations="enabled"/>
+
 </beans>
