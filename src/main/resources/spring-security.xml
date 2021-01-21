@@ -17,8 +17,8 @@
                      http://www.springframework.org/schema/security/spring-security.xsd">
 
     <!--配置哪些资源匿名可以访问（不登录也可以访问）-->
-    <!--<security:http security="none" pattern="/pages/a.html"></security:http>
-    <security:http security="none" pattern="/pages/b.html"></security:http>-->
+    <security:http security="none" pattern="/pages/a.html"></security:http>
+    <security:http security="none" pattern="/pages/b.html"></security:http>
     <!--<security:http security="none" pattern="/pages/**"></security:http>-->
     <security:http security="none" pattern="/login.html"></security:http>
 
